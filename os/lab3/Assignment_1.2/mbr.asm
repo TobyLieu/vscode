@@ -11,7 +11,6 @@ mov gs, ax
 ; 初始化栈指针
 mov sp, 0x7c00
 mov es, ax
-mov ax, 1                ; 扇区号
 mov bx, 0x7e00           ; bootloader的加载地址
 
 call ReadSector
@@ -22,19 +21,15 @@ jmp $ ; 死循环
 
 ; 利用BIOS中断读取硬盘
 ReadSector:
-mov si, 18
-div si ; 被除数在ax中，除数为18，商存在al中，余数存在ah中
-mov ch, al
-shr ch, 1 ; 柱面号
-mov dh, al
-and dh, 1 ; 磁头号
-mov cl, ah
-add cl, 1 ; 起始扇区号
-mov dl, 0 ; 驱动器号
+mov ch, 0x00
+mov dh, 0x00
+mov cl, 0x02
+mov dl, 0x00
 GoOnReading:
 mov ah, 02h ; 从磁盘读入数据
-mov al, 1 ; 要读扇区数
+mov al, 5 ; 要读扇区数
 int 13h
+jc GoOnReading
 ret
 
 times 510 - ($ - $$) db 0

@@ -1,7 +1,7 @@
 run:
-	@qemu-system-i386 -hda hd.img -serial null -parallel stdio 
+	@qemu-system-i386 -fda hd.img
 debug:
-	@qemu-system-i386 -s -S -hda hd.img -serial null -parallel stdio &
+	@qemu-system-i386 -s -S -fda hd.img -serial null -parallel stdio &
 	@sleep 1
 	@gnome-terminal -e "gdb -q -x gdbinit"
 build:
